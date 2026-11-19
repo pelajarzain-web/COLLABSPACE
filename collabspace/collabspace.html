@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CollabSpace — Platform Kolaborasi Talenta Informatika</title>
+  <!-- Script Midtrans Snap (Mode Sandbox) -->
+  <script type="text/javascript"
+    src="https://app.sandbox.midtrans.com/snap/snap.js"
+    data-client-key="GANTI_DENGAN_CLIENT_KEY_MIDTRANS_KAMU"></script>
+  <style>
+    :root {
+      --bg-color: #f8fafc;
+      --surface-color: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --border-color: #e2e8f0;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      --transition: all 0.25s ease-in-out;
+    }
+    [data-theme="dark"] {
+      --bg-color: #0f172a;
+      --surface-color: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #3b82f6;
+      --primary-hover: #60a5fa;
+      --border-color: #334155;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; transition: background-color 0.3s ease, color 0.3s ease; }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-color); }
+    ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* Animasi Transisi Halaman */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    header { position: sticky; top: 0; z-index: 1000; background-color: var(--surface-color); border-bottom: 1px solid var(--border-color); transition: var(--transition); }
+    .nav-container { max-width: 1200px; margin: 0 auto; padding: 0.85rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 1.45rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1; color: var(--primary); text-decoration: none; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; }
+    .logo img { height: 40px; width: auto; border-radius: 6px; display: block; object-fit: contain; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
+    .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: var(--transition); }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+    .nav-actions { display: flex; align-items: center; gap: 1rem; }
+    .btn-theme, .btn-primary, .btn-outline { padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: var(--transition); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+    .btn-theme { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); width: 38px; height: 38px; border-radius: 50%; }
+    .btn-primary { background-color: var(--primary); color: white; border: none; }
+    .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn-outline { background-color: transparent; border: 1px solid var(--border-color); color: var(--text-main); }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+    
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+    
+    /* Hero */
+    .hero-blue { background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%); padding: 6rem 1.5rem; text-align: center; }
+    .hero-blue h1 { font-size: 2.75rem; font-weight: 800; margin-bottom: 1.25rem; color: #ffffff; letter-spacing: -0.025em; }
+    .hero-blue p { font-size: 1.15rem; color: #93c5fd; margin: 0 auto 2rem; max-width: 800px; }
+    
+    .hero-buttons { display: flex; gap: 1rem; justify-content: center; margin-bottom: 2.5rem; }
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 2rem; }
+    .tech-tag { background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.35rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; color: #ffffff; backdrop-filter: blur(4px); }
+    
+    section { padding: 3rem 0; border-bottom: 1px solid var(--border-color); }
+    .section-title { text-align: center; margin-bottom: 2.5rem; }
+    .section-title h2 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .section-title p { color: var(--text-muted); }
+    .grid-cols-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .grid-cols-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+    
+    .card { background-color: var(--surface-color); border: 1px solid var(--border-color); border-radius: 1rem; padding: 1.5rem; box-shadow: var(--card-shadow); display: flex; flex-direction: column; transition: var(--transition); }
+    .card:hover { transform: translateY(-4px); border-color: var(--primary); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    .profile-img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem; border: 2px solid var(--primary); }
+    .card h3 { font-size: 1.15rem; margin-bottom: 0.25rem; }
+    .card .role { font-size: 0.85rem; color: var(--primary); font-weight: 600; margin-bottom: 0.75rem; }
+    .card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; flex-grow: 1; }
+    .skill-badges { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1.25rem; }
+    .badge { background-color: var(--bg-color); border: 1px solid var(--border-color); font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 0.3rem; color: var(--text-muted); }
+    
+    .project-scale-box { margin-bottom: 0.85rem; }
+    .project-scale-label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.3rem; }
+    .project-scale-select { width: 100%; padding: 0.45rem 0.65rem; border-radius: 0.45rem; border: 1px solid var(--border-color); font-size: 0.82rem; font-weight: 500; background-color: var(--bg-color); color: var(--text-main); cursor: pointer; transition: var(--transition); }
+    .project-scale-select:focus { outline: none; border-color: var(--primary); }
+
+    .search-filter-bar { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    .search-input, .filter-select { padding: 0.75rem 1rem; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: var(--surface-color); color: var(--text-main); font-size: 0.95rem; transition: var(--transition); }
+    .search-input:focus, .filter-select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+    .search-input { flex: 1; min-width: 250px; }
+    .filter-chips { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .chip { background-color: var(--surface-color); border: 1px solid var(--border-color); padding: 0.35rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: var(--transition); }
+    .chip:hover { border-color: var(--primary); }
+    .chip.active { background-color: var(--primary); color: white; border-color: var(--primary); }
+    
+    .step-box { display: flex; gap: 1.5rem; align-items: flex-start; background-color: var(--surface-color); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 1rem; margin-bottom: 1.5rem; box-shadow: var(--card-shadow); transition: var(--transition); }
+    .step-box:hover { transform: translateX(5px); border-color: var(--primary); }
+    .step-number { background-color: var(--primary); color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; flex-shrink: 0; }
+    .faq-item { background-color: var(--surface-color); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.75rem; margin-bottom: 1rem; }
+    
+    footer { background-color: var(--surface-color); border-top: 1px solid var(--border-color); padding: 3rem 1.5rem 1.5rem; margin-top: 3rem; }
+    .footer-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+    .footer-col h4 { font-size: 1rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 0.5rem; }
+    .footer-col ul li a { text-decoration: none; color: var(--text-muted); font-size: 0.9rem; cursor: pointer; }
+    .footer-col ul li a:hover { color: var(--primary); }
+    .footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 1.5rem; border-top: 1px solid var(--border-color); text-align: center; font-size: 0.85rem; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-container">
+      <a onclick="navigate('home')" class="logo">
+        <img src="az.png" alt="Logo CollabSpace">
+        <span>CollabSpace</span>
+      </a>
+      <ul class="nav-links">
+        <li><a onclick="navigate('home')" id="nav-home" class="active">Home</a></li>
+        <li><a onclick="navigate('explore')" id="nav-explore">Explore</a></li>
+        <li><a onclick="navigate('howItWorks')" id="nav-howItWorks">How It Works</a></li>
+        <li><a onclick="navigate('myProject')" id="nav-myProject">My Project</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-theme" id="themeToggle" title="Ubah Tema">🌙</button>
+        <a onclick="navigate('login')" class="btn-outline">Login</a>
+        <a onclick="navigate('register')" class="btn-primary">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="appContent">
+    <!-- Konten dimuat via JavaScript -->
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <div class="footer-col">
+        <h4>Navigasi</h4>
+        <ul>
+          <li><a onclick="navigate('home')">Home</a></li>
+          <li><a onclick="navigate('explore')">Explore</a></li>
+          <li><a onclick="navigate('howItWorks')">How It Works</a></li>
+          <li><a onclick="navigate('myProject')">My Project</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Kategori Skill</h4>
+        <ul>
+          <li><a onclick="navigate('explore', 'Frontend Development')">Frontend Development</a></li>
+          <li><a onclick="navigate('explore', 'Backend Development')">Backend Development</a></li>
+          <li><a onclick="navigate('explore', 'UI/UX Design')">UI/UX Design</a></li>
+          <li><a onclick="navigate('explore', 'Mobile Development')">Mobile Development</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Kontak Demo</h4>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">Surabaya, Jawa Timur<br>Email: support@collabspace.demo</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 CollabSpace — Tugas Pra-Magang SMK Kelas XI RPL. Seluruh data bersifat demo.</p>
+    </div>
+  </footer>
+
+  <script>
+    const developersData = [
+      { id: 1, name: "Reza Pratama", role: "Frontend Developer", level: "junior", category: "Frontend Development", email: "reza123@example.com", github: "rezapratama-dev", image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=500&q=80", skills: ["HTML", "CSS", "JavaScript", "Responsive Design"], description: "Senang mengubah desain menjadi website yang nyaman digunakan, responsif, dan rapi di berbagai ukuran layar.", projectTitle: "Personal Portfolio Website", projectDesc: "Website portofolio pribadi interaktif dengan mode gelap dan animasi halus.", tools: ["HTML5", "CSS3", "JavaScript", "Tailwind CSS"], contribution: "Merancang antarmuka pengguna, menyusun tata letak responsif, dan mengoptimalkan performa halaman." },
+      { id: 2, name: "Dimas Saputra", role: "Backend Developer", level: "pro", category: "Backend Development", email: "dimas.dev@example.com", github: "dimassaputra-dev", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=80", skills: ["Node.js", "Express.js", "REST API", "MySQL"], description: "Tertarik membangun sistem backend, mengelola data, dan membuat API untuk mendukung aplikasi web.", projectTitle: "Task Management API", projectDesc: "API RESTful untuk sistem manajemen tugas tim dengan sistem autentikasi JWT.", tools: ["Node.js", "Express.js", "MySQL", "Postman"], contribution: "Membuat endpoint REST API, merancang struktur database, dan mengimplementasikan middleware autentikasi." },
+      { id: 3, name: "Nabila Putri", role: "UI/UX Designer", level: "junior", category: "UI/UX Design", email: "nabila.design@example.com", github: "nabilaputri-design", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=500&q=80", skills: ["Figma", "Wireframing", "Prototyping", "UI Design"], description: "Suka merancang tampilan aplikasi yang sederhana, mudah dipahami, dan tidak membuat pengguna bingung.", projectTitle: "Aplikasi Pengelola Keuangan", projectDesc: "Desain antarmuka aplikasi seluler untuk pencatatan keuangan harian.", tools: ["Figma", "Adobe Illustrator", "Canva"], contribution: "Melakukan riset pengguna, menyusun wireframe low-fidelity, hingga membuat prototipe interaktif." },
+      { id: 4, name: "Fajar Ramadhan", role: "Full-Stack Developer", level: "pro", category: "Full-Stack Development", email: "fajar.dev@example.com", github: "fajarramadhan-dev", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=500&q=80", skills: ["HTML", "CSS", "JavaScript", "Node.js", "MySQL"], description: "Menyukai proses membangun aplikasi dari tampilan sampai pengolahan data.", projectTitle: "Website Manajemen Tugas Tim", projectDesc: "Platform kolaborasi tugas berbasis web dengan pembaruan status secara langsung.", tools: ["JavaScript", "Express.js", "MySQL", "Bootstrap"], contribution: "Mengembangkan sisi frontend dan menghubungkannya dengan database melalui backend API." },
+      { id: 5, name: "Alya Maharani", role: "Java Developer", level: "junior", category: "Backend Development", email: "alya.code@example.com", github: "alyamaharani-dev", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=500&q=80", skills: ["Java", "OOP", "JDBC", "MySQL"], description: "Berfokus pada pemrograman berorientasi objek dan pengembangan aplikasi dengan struktur kode yang terorganisasi.", projectTitle: "Aplikasi Inventaris Barang", projectDesc: "Aplikasi desktop berbasis Java untuk pendataan stok barang gudang sekolah.", tools: ["Java", "NetBeans", "MySQL JDBC"], contribution: "Membangun logika arsitektur berorientasi objek dan koneksi basis data relasional." },
+      { id: 6, name: "Rizky Firmansyah", role: "React Developer", level: "pro", category: "Frontend Development", email: "rizky.dev@example.com", github: "rizkyfirmansyah-dev", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=500&q=80", skills: ["React", "JavaScript", "CSS", "Component Design"], description: "Tertarik membuat antarmuka interaktif dengan komponen yang dapat digunakan kembali.", projectTitle: "Dashboard Produktivitas", projectDesc: "Dashboard analitik kegiatan harian dengan komponen modular berbasis React.", tools: ["React.js", "CSS Modules", "Chart.js"], contribution: "Membangun struktur komponen UI yang dapat digunakan kembali dan manajemen state aplikasi." },
+      { id: 7, name: "Farhan Akbar", role: "Python Developer", level: "junior", category: "Backend Development", email: "farhan.code@example.com", github: "farhanakbar-dev", image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=500&q=80", skills: ["Python", "Flask", "SQLite", "Automation"], description: "Senang membuat aplikasi sederhana dan mengotomatisasi pekerjaan berulang menggunakan Python.", projectTitle: "Aplikasi Pencatatan Tugas", projectDesc: "Aplikasi web ringan berbasis Flask untuk mencatat jadwal dan tugas harian.", tools: ["Python", "Flask", "SQLite"], contribution: "Menulis skrip backend server, manajemen routing, dan integrasi penyimpanan data ringan." },
+      { id: 8, name: "Siti Aisyah", role: "Database Developer", level: "junior", category: "Database", email: "aisyah.db@example.com", github: "sitiaisyah-dev", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=500&q=80", skills: ["MySQL", "SQL", "Database Design", "ERD"], description: "Memiliki minat pada perancangan database, hubungan antarentitas, dan pengelolaan data aplikasi.", projectTitle: "Sistem Database Perpustakaan", projectDesc: "Perancangan skema database relasional lengkap dengan prosedur dan normalisasi data.", tools: ["MySQL", "phpMyAdmin", "Draw.io (ERD)"], contribution: "Merancang Entity Relationship Diagram (ERD) dan menulis kueri SQL kompleks." },
+      { id: 9, name: "Bagas Prakoso", role: "Android Developer", level: "junior", category: "Mobile Development", email: "bagas.mobile@example.com", github: "bagasprakoso-dev", image: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=500&q=80", skills: ["Java", "Android Studio", "XML Layout", "SQLite"], description: "Tertarik membuat aplikasi mobile yang praktis dan membantu menyelesaikan kebutuhan sehari-hari.", projectTitle: "Aplikasi Catatan Harian", projectDesc: "Aplikasi Android offline untuk mencatat jurnal dan pengingat kegiatan.", tools: ["Android Studio", "Java", "XML", "SQLite"], contribution: "Membuat tata letak antarmuka XML mobile dan logika penyimpanan lokal." },
+      { id: 10, name: "Putri Amelia", role: "Web Designer", level: "junior", category: "UI/UX Design", email: "putri.design@example.com", github: "putriamelia-design", image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=500&q=80", skills: ["HTML", "CSS", "Figma", "Typography", "Web Layout"], description: "Memperhatikan detail visual, keterbacaan, komposisi warna, dan konsistensi desain website.", projectTitle: "Landing Page Produk Digital", projectDesc: "Halaman penawaran produk digital dengan estetika visual modern dan tipografi bersih.", tools: ["Figma", "HTML5", "CSS3"], contribution: "Menyusun skema warna, hierarki teks, dan implementasi gaya CSS statis." },
+      { id: 11, name: "Ardiansyah Putra", role: "Game Developer", level: "pro", category: "Game Development", email: "ardi.game@example.com", github: "ardiansyah-dev", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=500&q=80", skills: ["C#", "Unity", "Game Logic", "Level Design"], description: "Tertarik mengembangkan mekanik permainan, interaksi pemain, dan pengalaman bermain yang menyenangkan.", projectTitle: "Game Platformer 2D", projectDesc: "Permainan petualangan 2 dimensi dengan mekanisme lompatan dan rintangan dinamis.", tools: ["Unity Engine", "C#", "Aseprite"], contribution: "Menulis skrip pergerakan karakter menggunakan C# dan pengaturan level permainan." },
+      { id: 12, name: "Kevin Wijaya", role: "DevOps & Deployment", level: "pro", category: "DevOps & Deployment", email: "kevin.dev@example.com", github: "kevinwijaya-dev", image: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=500&q=80", skills: ["Git", "GitHub", "Linux Basics", "Docker Basics", "Deployment"], description: "Senang mempelajari proses menjalankan aplikasi, mengelola versi kode, dan membantu tim menyiapkan proyek untuk digunakan.", projectTitle: "Deployment Website Portofolio", projectDesc: "Pengaturan alur kerja rilis aplikasi web portofolio ke layanan hosting statis.", tools: ["Git", "GitHub Pages", "Linux CLI"], contribution: "Mengatur manajemen versi repositori kode dan konfigurasi peluncuran online." }
+    ];
+
+    const skillCategories = [
+      { name: "Frontend Development", icon: "🌐", count: 3, desc: "Membangun antarmuka web interaktif & responsif." },
+      { name: "Backend Development", icon: "⚙️", count: 3, desc: "Mengelola server, database, dan REST API." },
+      { name: "Full-Stack Development", icon: "🚀", count: 1, desc: "Menguasai pengembangan sisi klien dan peladen." },
+      { name: "UI/UX Design", icon: "🎨", count: 2, desc: "Merancang wireframe, prototipe, dan pengalaman pengguna." },
+      { name: "Mobile Development", icon: "📱", count: 1, desc: "Membuat aplikasi praktis untuk perangkat seluler." },
+      { name: "Database", icon: "🗄️", count: 1, desc: "Perancangan struktur data, normalisasi, dan ERD." },
+      { name: "Game Development", icon: "🎮", count: 1, desc: "Mengembangkan mekanik game dan interaksi pemain." },
+      { name: "DevOps & Deployment", icon: "☁️", count: 1, desc: "Manajemen versi kode dan publikasi aplikasi." }
+    ];
+
+    const demoProjects = [
+      { title: "Website Manajemen Tugas", category: "Full-Stack", desc: "Aplikasi kolaborasi tim untuk memantau progres tugas harian secara real-time.", tech: ["HTML", "Express", "MySQL"] },
+      { title: "Dashboard Produktivitas", category: "Frontend", desc: "Tampilan analitik kegiatan harian dengan komponen modular dan grafik interaktif.", tech: ["React", "CSS", "Chart.js"] },
+      { title: "Aplikasi Inventaris Barang", category: "Backend", desc: "Sistem pendataan stok logistik sekolah dengan arsitektur berbasis objek.", tech: ["Java", "NetBeans", "JDBC"] },
+      { title: "Landing Page Produk Digital", category: "UI/UX", desc: "Halaman penawaran produk digital dengan estetika visual modern dan tipografi bersih.", tech: ["Figma", "HTML5", "CSS3"] }
+    ];
+
+    // Helper perhitungan harga sesuai level (Pro/Pemula) dan skala proyek (Kecil/Besar)
+    function getTalentPrice(level, size) {
+      if (level === 'pro') {
+        return size === 'besar' ? 5000000 : 500000;
+      }
+      return size === 'besar' ? 1000000 : 250000;
+    }
+
+    // Helper untuk mendapatkan opsi dropdown skala proyek berdasarkan level talenta
+    function getProjectScaleOptions(level, selectedSize = 'kecil') {
+      if (level === 'pro') {
+        return `
+          <option value="kecil" ${selectedSize === 'kecil' ? 'selected' : ''}>Proyek Kecil — Rp 500.000</option>
+          <option value="besar" ${selectedSize === 'besar' ? 'selected' : ''}>Proyek Besar — Rp 5.000.000</option>
+        `;
+      }
+      return `
+        <option value="kecil" ${selectedSize === 'kecil' ? 'selected' : ''}>Proyek Kecil — Rp 250.000</option>
+        <option value="besar" ${selectedSize === 'besar' ? 'selected' : ''}>Proyek Besar — Rp 1.000.000</option>
+      `;
+    }
+
+    // Helper membaca data tim dari localStorage
+    function getTeam() {
+      let data = localStorage.getItem('collabTeam');
+      if (!data) return [];
+      let parsed = JSON.parse(data);
+      if (parsed.length > 0 && typeof parsed[0] === 'number') {
+        parsed = parsed.map(id => ({ id: id, size: 'kecil' }));
+        localStorage.setItem('collabTeam', JSON.stringify(parsed));
+      }
+      return parsed;
+    }
+
+    const themeToggle = document.getElementById('themeToggle');
+    const htmlElement = document.documentElement;
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    htmlElement.setAttribute('data-theme', currentTheme);
+    themeToggle.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+
+    themeToggle.addEventListener('click', () => {
+      let theme = htmlElement.getAttribute('data-theme');
+      let newTheme = theme === 'light' ? 'dark' : 'light';
+      htmlElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+    });
+
+    function navigate(page, param = null) {
+      window.scrollTo(0, 0);
+      document.querySelectorAll('.nav-links a').forEach(el => el.classList.remove('active'));
+      if(document.getElementById('nav-' + page)) {
+        document.getElementById('nav-' + page).classList.add('active');
+      }
+
+      const content = document.getElementById('appContent');
+      
+      content.style.animation = 'none';
+      content.offsetHeight; /* trigger reflow */
+      content.style.animation = 'fadeIn 0.4s ease-out forwards';
+
+      if (page === 'home') {
+        content.innerHTML = `
+          <section class="hero-blue">
+            <div>
+              <h1>Great Projects Start With The Right People.</h1>
+              <p>Sudah punya ide, tetapi belum menemukan orang yang tepat untuk mengerjakannya? Temukan developer, designer, dan talenta digital yang bisa membantumu mewujudkan proyek berikutnya.</p>
+              <div class="hero-buttons">
+                <button onclick="navigate('explore')" class="btn-primary" style="background-color: #3b82f6;">Explore Talent</button>
+                <button onclick="navigate('howItWorks')" class="btn-outline" style="color: #ffffff; border-color: #ffffff;">How It Works</button>
+              </div>
+              <div class="tech-tags">
+                <span class="tech-tag">HTML & CSS</span>
+                <span class="tech-tag">React</span>
+                <span class="tech-tag">Java</span>
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">Figma</span>
+                <span class="tech-tag">MySQL</span>
+              </div>
+            </div>
+          </section>
+
+          <div class="container">
+            <section>
+              <div class="section-title">
+                <h2>Ide bagus butuh tim yang tepat.</h2>
+                <p>Terkadang proyek tidak berjalan bukan karena idenya kurang bagus, melainkan karena belum menemukan orang yang memiliki keahlian yang dibutuhkan.</p>
+              </div>
+              <div class="grid-cols-3">
+                <div class="card" style="text-align: center;">
+                  <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔍</div>
+                  <h3>Temukan Keahlian</h3>
+                  <p>Cari talenta berdasarkan spesialisasi teknologi yang sesuai dengan kebutuhan pengembangan proyekmu.</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                  <div style="font-size: 2rem; margin-bottom: 0.5rem;">📂</div>
+                  <h3>Lihat Hasil Karya</h3>
+                  <p>Tinjau portofolio, proyek sebelumnya, serta kontribusi nyata dari setiap calon anggota tim.</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                  <div style="font-size: 2rem; margin-bottom: 0.5rem;">🤝</div>
+                  <h3>Susun Tim Proyek</h3>
+                  <p>Pilih dan kumpulkan talenta terbaik ke dalam satu wadah kerja untuk memulai kolaborasi.</p>
+                </div>
+              </div>
+            </section>
+
+            <section>
+              <div class="section-title">
+                <h2>Featured Talent</h2>
+                <p>Beberapa talenta pilihan siap membantu mewujudkan proyek digitalmu.</p>
+              </div>
+              <div class="grid-cols-4">
+                ${developersData.slice(0, 4).map(dev => `
+                  <div class="card">
+                    <img src="${dev.image}" alt="${dev.name}" class="profile-img">
+                    <h3>${dev.name}</h3>
+                    <div class="role">${dev.role} <span style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; background: ${dev.level==='pro'?'#2563eb':'#64748b'}; color:white; margin-left:4px;">${dev.level==='pro'?'Pro':'Pemula'}</span></div>
+                    <p>${dev.description}</p>
+                    <div class="skill-badges">
+                      ${dev.skills.slice(0, 3).map(s => `<span class="badge">${s}</span>`).join('')}
+                    </div>
+                    <button onclick="navigate('detail', ${dev.id})" class="btn-outline" style="width: 100%;">View Profile</button>
+                  </div>
+                `).join('')}
+              </div>
+              <div style="text-align: center; margin-top: 2rem;">
+                <button onclick="navigate('explore')" class="btn-outline">Explore All Talent →</button>
+              </div>
+            </section>
+
+            <section>
+              <div class="section-title">
+                <h2>Jelajahi Berdasarkan Kategori</h2>
+                <p>Temukan keahlian spesifik yang dibutuhkan untuk modul aplikasimu.</p>
+              </div>
+              <div class="grid-cols-4">
+                ${skillCategories.map(cat => `
+                  <div class="card" style="cursor: pointer;" onclick="navigate('explore', '${cat.name}')">
+                    <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">${cat.icon}</div>
+                    <h3>${cat.name}</h3>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">${cat.desc}</p>
+                    <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600; margin-top: auto;">${cat.count} Talenta Tersedia →</span>
+                  </div>
+                `).join('')}
+              </div>
+            </section>
+
+            <section>
+              <div class="section-title">
+                <h2>Contoh Proyek Portofolio</h2>
+                <p>Beberapa contoh proyek demo yang dikerjakan oleh talenta CollabSpace.</p>
+              </div>
+              <div class="grid-cols-4">
+                ${demoProjects.map(p => `
+                  <div class="card">
+                    <span class="badge" style="align-self: flex-start; margin-bottom: 0.5rem;">${p.category}</span>
+                    <h3>${p.title}</h3>
+                    <p>${p.desc}</p>
+                    <div class="skill-badges" style="margin-top: auto;">
+                      ${p.tech.map(t => `<span class="badge">${t}</span>`).join('')}
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </section>
+
+            <section style="text-align: center; border: none; padding: 4rem 0;">
+              <h2 style="font-size: 2.25rem; margin-bottom: 1rem;">Your Next Project Needs a Team.</h2>
+              <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">Mulai dengan mencari keahlian yang kamu butuhkan. Temukan orang yang tepat, susun tim, dan kembangkan idemu bersama.</p>
+              <button onclick="navigate('explore')" class="btn-primary">Explore Talent</button>
+            </section>
+          </div>
+        `;
+      }
+      else if (page === 'explore') {
+        content.innerHTML = `
+          <div class="container">
+            <div class="section-title" style="text-align: left; margin-bottom: 1.5rem;">
+              <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem;">Find the Skills Your Project Needs.</h1>
+              <p>Jelajahi profil, pilih skala proyek (Kecil / Besar), dan rekrut talenta yang cocok untuk timmu.</p>
+            </div>
+            <div class="search-filter-bar">
+              <input type="text" id="searchInput" class="search-input" placeholder="Cari berdasarkan nama, peran, skill, atau teknologi..." oninput="filterTalents()">
+              <select id="categoryFilter" class="filter-select" onchange="syncCategoryAndFilter()">
+                <option value="">Semua Kategori</option>
+                <option value="Frontend Development">Frontend Development</option>
+                <option value="Backend Development">Backend Development</option>
+                <option value="Full-Stack Development">Full-Stack Development</option>
+                <option value="UI/UX Design">UI/UX Design</option>
+                <option value="Mobile Development">Mobile Development</option>
+                <option value="Database">Database</option>
+                <option value="Game Development">Game Development</option>
+                <option value="DevOps & Deployment">DevOps & Deployment</option>
+              </select>
+              <button onclick="resetFilters()" class="btn-outline">Reset Filter</button>
+            </div>
+            <div class="filter-chips">
+              <span class="chip ${!param ? 'active' : ''}" onclick="setChipFilter('', this)">Semua</span>
+              <span class="chip ${param === 'Frontend Development' ? 'active' : ''}" onclick="setChipFilter('Frontend Development', this)">Frontend</span>
+              <span class="chip ${param === 'Backend Development' ? 'active' : ''}" onclick="setChipFilter('Backend Development', this)">Backend</span>
+              <span class="chip ${param === 'UI/UX Design' ? 'active' : ''}" onclick="setChipFilter('UI/UX Design', this)">UI/UX</span>
+              <span class="chip ${param === 'Mobile Development' ? 'active' : ''}" onclick="setChipFilter('Mobile Development', this)">Mobile</span>
+              <span class="chip ${param === 'Database' ? 'active' : ''}" onclick="setChipFilter('Database', this)">Database</span>
+              <span class="chip ${param === 'Game Development' ? 'active' : ''}" onclick="setChipFilter('Game Development', this)">Game</span>
+              <span class="chip ${param === 'DevOps & Deployment' ? 'active' : ''}" onclick="setChipFilter('DevOps & Deployment', this)">DevOps</span>
+            </div>
+            <p id="resultCount" style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">Menampilkan talenta</p>
+            <div class="grid-cols-3" id="talentGrid"></div>
+            <div id="emptyState" style="display: none; text-align: center; padding: 4rem 0;">
+              <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+              <h3>Tidak ada talenta yang ditemukan</h3>
+              <p style="color: var(--text-muted); margin-top: 0.5rem;">Coba gunakan kata kunci lain atau reset filter pencarian.</p>
+            </div>
+          </div>
+        `;
+        if (param) document.getElementById('categoryFilter').value = param;
+        filterTalents();
+      }
+      else if (page === 'detail') {
+        const dev = developersData.find(d => d.id === param);
+        if (!dev) {
+          content.innerHTML = `<div class="container" style="text-align: center; padding: 4rem 0;"><h2>Profil tidak ditemukan</h2><button onclick="navigate('explore')" class="btn-primary" style="margin-top:1rem;">Kembali ke Explore</button></div>`;
+          return;
+        }
+        const existingMember = getTeam().find(t => t.id === dev.id);
+        const currentScale = existingMember ? existingMember.size : 'kecil';
+
+        content.innerHTML = `
+          <div class="container" style="max-width: 800px; padding-top: 3rem;">
+            <button onclick="navigate('explore')" class="btn-outline" style="margin-bottom: 2rem;">← Kembali ke Explore</button>
+            <div class="card" style="padding: 2.5rem;">
+              <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; margin-bottom: 2rem;">
+                <img src="${dev.image}" alt="${dev.name}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary);">
+                <div style="flex: 1; min-width: 220px;">
+                  <h1 style="font-size: 1.75rem; margin-bottom: 0.25rem;">${dev.name}</h1>
+                  <div class="role" style="font-size: 1rem; margin-bottom: 0.5rem;">${dev.role} <span style="font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; background: ${dev.level==='pro'?'#2563eb':'#64748b'}; color:white; margin-left:6px;">${dev.level==='pro'?'Pro (Kecil: 500k | Besar: 5jt)':'Pemula (Kecil: 250k | Besar: 1jt)'}</span></div>
+                  <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0;">📧 ${dev.email} &bull; 🐙 GitHub: @${dev.github}</p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; min-width: 210px;">
+                  <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Pilih Skala Proyek (${dev.level === 'pro' ? 'Pro' : 'Pemula'}):</label>
+                  <select id="detailScaleSelect-${dev.id}" class="project-scale-select">
+                    ${getProjectScaleOptions(dev.level, currentScale)}
+                  </select>
+                  <button onclick="addToProject(${dev.id}, document.getElementById('detailScaleSelect-${dev.id}').value)" class="btn-primary" style="padding: 0.7rem 1.25rem; width: 100%;">
+                    Pilih untuk Proyek
+                  </button>
+                </div>
+              </div>
+              <hr style="border: none; border-top: 1px solid var(--border-color); margin: 1.5rem 0;">
+              <h3 style="margin-bottom: 0.75rem;">Tentang Saya</h3>
+              <p style="color: var(--text-muted); margin-bottom: 1.5rem;">${dev.description}</p>
+              <h3 style="margin-bottom: 0.75rem;">Keahlian & Teknologi</h3>
+              <div class="skill-badges" style="margin-bottom: 1.5rem;">
+                ${dev.skills.map(s => `<span class="badge" style="padding: 0.3rem 0.8rem; font-size: 0.85rem;">${s}</span>`).join('')}
+              </div>
+              <h3 style="margin-bottom: 0.75rem;">Proyek Unggulan</h3>
+              <div style="background-color: var(--bg-color); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.75rem; margin-bottom: 1.5rem;">
+                <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--primary);">${dev.projectTitle}</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">${dev.projectDesc}</p>
+                <p style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong>Tools:</strong> ${dev.tools.join(', ')}</p>
+                <p style="font-size: 0.85rem;"><strong>Kontribusi:</strong> ${dev.contribution}</p>
+              </div>
+              <p style="font-size: 0.75rem; color: var(--text-muted); font-style: italic; text-align: center;">Catatan: Seluruh data pengalaman dan portofolio merupakan data demo untuk keperluan penilaian tugas.</p>
+            </div>
+          </div>
+        `;
+      }
+      else if (page === 'howItWorks') {
+        content.innerHTML = `
+          <div class="container" style="max-width: 800px; padding-top: 3rem;">
+            <div class="section-title">
+              <h1>Bagaimana Cara Kerja CollabSpace?</h1>
+              <p>Panduan ringkas memanfaatkan platform untuk menyusun tim proyek informatika impianmu.</p>
+            </div>
+            <div class="step-box"><div class="step-number">1</div><div><h3>Explore — Cari Developer</h3><p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Gunakan halaman Explore untuk menyaring talenta berdasarkan kategori skill, teknologi, atau nama spesifik.</p></div></div>
+            <div class="step-box"><div class="step-number">2</div><div><h3>Review — Periksa Portofolio</h3><p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Buka profil lengkap untuk melihat deskripsi diri, riwayat proyek demo, tools, dan kontribusi nyata.</p></div></div>
+            <div class="step-box"><div class="step-number">3</div><div><h3>Build Your Team — Pilih Anggota & Skala Proyek</h3><p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Tentukan skala proyek (Proyek Kecil atau Proyek Besar) pada talenta Pemula maupun Pro, lalu tekan "Pilih" untuk memasukkan mereka ke My Project.</p></div></div>
+            <div class="step-box"><div class="step-number">4</div><div><h3>Continue to Payment — Pembayaran via Midtrans</h3><p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Periksa ringkasan pilihan anggota (Pemula: kecil Rp 250rb / besar Rp 1jt & Pro: kecil Rp 500rb / besar Rp 5jt), lalu lanjutkan transaksi melalui Midtrans.</p></div></div>
+            <div style="margin-top: 4rem;">
+              <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; text-align: center;">Frequently Asked Questions (FAQ)</h2>
+              <div class="faq-item"><h4>Apakah saya bisa memilih lebih dari satu developer?</h4><p style="color: var(--text-muted); font-size: 0.9rem;">Ya, kamu bisa memilih beberapa talenta dengan keahlian berbeda ke dalam tim proyekmu.</p></div>
+              <div class="faq-item"><h4>Apakah biaya kontribusi setiap talenta sama?</h4><p style="color: var(--text-muted); font-size: 0.9rem;">Tidak, biaya dibedakan berdasarkan level dan skala proyek: Pemula (Junior) Rp 250.000 (kecil) / Rp 1.000.000 (besar) dan Berpengalaman (Pro) Rp 500.000 (kecil) / Rp 5.000.000 (besar).</p></div>
+              <div class="faq-item"><h4>Apakah pembayaran di website ini sungguhan?</h4><p style="color: var(--text-muted); font-size: 0.9rem;">Transaksi menggunakan Midtrans Sandbox untuk simulasi pengujian pembayaran.</p></div>
+            </div>
+          </div>
+        `;
+      }
+      else if (page === 'myProject') {
+        content.innerHTML = `
+          <div class="container" style="max-width: 900px; padding-top: 3rem;">
+            <div class="section-title" style="text-align: left; margin-bottom: 2rem;">
+              <h1 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem;">Your Project Team</h1>
+              <p>Kelola anggota yang telah kamu pilih dan atur skala proyeknya (Kecil / Besar).</p>
+            </div>
+            <div id="teamContainer" class="grid-cols-3" style="margin-bottom: 2rem;"></div>
+            <div id="emptyTeamState" style="display: none; text-align: center; padding: 4rem 1rem; background-color: var(--surface-color); border: 1px solid var(--border-color); border-radius: 1rem;">
+              <div style="font-size: 3rem; margin-bottom: 1rem;">👥</div>
+              <h3>Your team starts here.</h3>
+              <p style="color: var(--text-muted); margin: 0.5rem 0 1.5rem 0; max-width: 400px; margin-left: auto; margin-right: auto;">Belum ada anggota yang dipilih. Jelajahi profil developer dan temukan keahlian yang kamu butuhkan.</p>
+              <button onclick="navigate('explore')" class="btn-primary">Explore Talent</button>
+            </div>
+            <div id="summaryCard" class="card" style="display: none; padding: 2rem; margin-top: 2rem;">
+              <h3 style="margin-bottom: 1rem;">Ringkasan Kebutuhan Proyek</h3>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; font-size: 0.95rem;"><span>Total Anggota Terpilih:</span><strong id="totalMemberCount">0 Orang</strong></div>
+              <div id="priceBreakdown" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; padding-left: 0.75rem; border-left: 2px solid var(--primary); line-height: 1.8;"></div>
+              <hr style="border: none; border-top: 1px solid var(--border-color); margin: 1rem 0;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem; font-size: 1.15rem;"><strong>Total Nominal Pembayaran:</strong><strong id="totalPrice" style="color: var(--primary);">Rp 0</strong></div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; font-style: italic;">Catatan: Periksa kembali pilihan anggota dan skala proyek sebelum melanjutkan ke pembayaran.</p>
+              <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <button onclick="navigate('explore')" class="btn-outline">Explore More Talent</button>
+                <button onclick="navigate('payment')" class="btn-primary">Continue to Payment</button>
+              </div>
+            </div>
+          </div>
+        `;
+        renderTeam();
+      }
+      else if (page === 'payment') {
+        let team = getTeam();
+        if(team.length === 0) {
+          alert('Belum ada anggota yang dipilih.');
+          navigate('myProject');
+          return;
+        }
+        let calculatedPrice = team.reduce((sum, item) => {
+          const dev = developersData.find(d => d.id === item.id);
+          return sum + (dev ? getTalentPrice(dev.level, item.size) : 0);
+        }, 0);
+
+        content.innerHTML = `
+          <div class="container" style="max-width: 700px; padding-top: 3rem;">
+            <button onclick="navigate('myProject')" class="btn-outline" style="margin-bottom: 2rem;">← Kembali ke My Project</button>
+            <div class="card" style="padding: 2.5rem;">
+              <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Pembayaran via Midtrans</h2>
+              <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Selesaikan transaksi kolaborasi tim proyekmu melalui portal pembayaran Midtrans.</p>
+              <div style="background-color: var(--bg-color); padding: 1.25rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">
+                  <span>Total Anggota Tim:</span>
+                  <span>${team.length} Orang</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span>Total Nominal Pembayaran:</span>
+                  <strong style="color: var(--primary); font-size: 1.2rem;">Rp ${calculatedPrice.toLocaleString('id-ID')}</strong>
+                </div>
+              </div>
+              <div style="border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.75rem; margin-bottom: 1.5rem; background-color: var(--bg-color); font-size: 0.85rem; color: var(--text-muted); text-align: center;">
+                Mendukung pembayaran melalui <strong>QRIS, GoPay, DANA, OVO, ShopeePay,</strong> serta <strong>Virtual Account Bank</strong>.
+              </div>
+              <button id="btnPayMidtrans" onclick="payWithMidtrans(${calculatedPrice})" class="btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1rem;">
+                Bayar Sekarang
+              </button>
+            </div>
+          </div>
+        `;
+      }
+      else if (page === 'login') {
+        content.innerHTML = `
+          <div class="container" style="display: flex; align-items: center; justify-content: center; max-width: 450px; min-height: 70vh;">
+            <div class="card" style="width: 100%; padding: 2.5rem;">
+              <div style="text-align: center; margin-bottom: 2rem;">
+                <h1 style="font-size: 1.75rem; margin-bottom: 0.5rem;">Selamat Datang</h1>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Masuk ke akun CollabSpace milikmu</p>
+              </div>
+              <form onsubmit="handleAuth(event, 'Login')">
+                <div style="margin-bottom: 1.25rem;"><label style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem;">Email</label><input type="email" required class="search-input" style="width: 100%;" placeholder="nama@example.com"></div>
+                <div style="margin-bottom: 1.5rem;"><label style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem;">Password</label><input type="password" required class="search-input" style="width: 100%;" placeholder="••••••••"></div>
+                <button type="submit" class="btn-primary" style="width: 100%; padding: 0.75rem;">Login</button>
+              </form>
+              <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-top: 1.5rem;">Belum punya akun? <a onclick="navigate('register')" style="color: var(--primary); cursor: pointer; font-weight: 500;">Sign Up</a></p>
+            </div>
+          </div>
+        `;
+      }
+      else if (page === 'register') {
+        content.innerHTML = `
+          <div class="container" style="display: flex; align-items: center; justify-content: center; max-width: 450px; min-height: 70vh;">
+            <div class="card" style="width: 100%; padding: 2.5rem;">
+              <div style="text-align: center; margin-bottom: 2rem;">
+                <h1 style="font-size: 1.75rem; margin-bottom: 0.5rem;">Buat Akun Baru</h1>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Bergabunglah dengan platform CollabSpace</p>
+              </div>
+              <form onsubmit="handleAuth(event, 'Registrasi')">
+                <div style="margin-bottom: 1.25rem;"><label style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem;">Nama Lengkap</label><input type="text" required class="search-input" style="width: 100%;" placeholder="Nama Kamu"></div>
+                <div style="margin-bottom: 1.25rem;"><label style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem;">Email</label><input type="email" required class="search-input" style="width: 100%;" placeholder="nama@example.com"></div>
+                <div style="margin-bottom: 1.5rem;"><label style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem;">Password</label><input type="password" required class="search-input" style="width: 100%;" placeholder="••••••••"></div>
+                <button type="submit" class="btn-primary" style="width: 100%; padding: 0.75rem;">Sign Up</button>
+              </form>
+              <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-top: 1.5rem;">Sudah punya akun? <a onclick="navigate('login')" style="color: var(--primary); cursor: pointer; font-weight: 500;">Login</a></p>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function filterTalents() {
+      const keyword = document.getElementById('searchInput').value.toLowerCase();
+      const cat = document.getElementById('categoryFilter').value;
+      const grid = document.getElementById('talentGrid');
+      const empty = document.getElementById('emptyState');
+      const count = document.getElementById('resultCount');
+      const team = getTeam();
+
+      const filtered = developersData.filter(dev => {
+        const matchKey = dev.name.toLowerCase().includes(keyword) || dev.role.toLowerCase().includes(keyword) || dev.description.toLowerCase().includes(keyword) || dev.skills.some(s => s.toLowerCase().includes(keyword));
+        const matchCat = !cat || dev.category === cat;
+        return matchKey && matchCat;
+      });
+
+      count.textContent = `Menampilkan ${filtered.length} talenta`;
+      if (filtered.length === 0) {
+        grid.style.display = 'none';
+        empty.style.display = 'block';
+      } else {
+        grid.style.display = 'grid';
+        empty.style.display = 'none';
+        grid.innerHTML = filtered.map(dev => {
+          const existing = team.find(t => t.id === dev.id);
+          const defaultScale = existing ? existing.size : 'kecil';
+
+          return `
+            <div class="card">
+              <img src="${dev.image}" alt="${dev.name}" class="profile-img">
+              <h3>${dev.name}</h3>
+              <div class="role">${dev.role} <span style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; background: ${dev.level==='pro'?'#2563eb':'#64748b'}; color:white; margin-left:4px;">${dev.level==='pro'?'Pro':'Pemula'}</span></div>
+              <p>${dev.description}</p>
+              <div class="skill-badges">
+                ${dev.skills.slice(0, 3).map(s => `<span class="badge">${s}</span>`).join('')}
+              </div>
+              <div class="project-scale-box">
+                <label for="scaleSelect-${dev.id}" class="project-scale-label">Pilihan Skala Proyek (${dev.level === 'pro' ? 'Pro' : 'Pemula'}):</label>
+                <select id="scaleSelect-${dev.id}" class="project-scale-select">
+                  ${getProjectScaleOptions(dev.level, defaultScale)}
+                </select>
+              </div>
+              <div style="display: flex; gap: 0.5rem; margin-top: auto;">
+                <button onclick="navigate('detail', ${dev.id})" class="btn-outline" style="flex: 1;">View Profile</button>
+                <button onclick="addToProject(${dev.id}, document.getElementById('scaleSelect-${dev.id}').value)" class="btn-primary" style="flex: 1; font-size: 0.85rem;">Pilih</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function syncCategoryAndFilter() {
+      const cat = document.getElementById('categoryFilter').value;
+      document.querySelectorAll('.chip').forEach(c => {
+        if(c.textContent.toLowerCase().includes(cat.toLowerCase().split(' ')[0])) c.classList.add('active');
+        else c.classList.remove('active');
+      });
+      filterTalents();
+    }
+
+    function setChipFilter(catName, el) {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      if (el) el.classList.add('active');
+      document.getElementById('categoryFilter').value = catName;
+      filterTalents();
+    }
+
+    function resetFilters() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('categoryFilter').value = '';
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      document.querySelector('.chip').classList.add('active');
+      filterTalents();
+    }
+
+    function addToProject(id, size = 'kecil') {
+      let team = getTeam();
+      const existingIndex = team.findIndex(item => item.id === id);
+      const scaleLabel = size === 'besar' ? 'Proyek Besar' : 'Proyek Kecil';
+
+      if (existingIndex === -1) {
+        team.push({ id: id, size: size });
+        localStorage.setItem('collabTeam', JSON.stringify(team));
+        alert(`Talenta berhasil ditambahkan ke My Project (${scaleLabel})!`);
+      } else {
+        if (team[existingIndex].size !== size) {
+          team[existingIndex].size = size;
+          localStorage.setItem('collabTeam', JSON.stringify(team));
+          alert(`Skala proyek talenta ini diperbarui menjadi ${scaleLabel}!`);
+        } else {
+          alert(`Talenta ini sudah ada di dalam tim proyekmu (${scaleLabel}).`);
+        }
+      }
+    }
+
+    function updateMemberSize(id, newSize) {
+      let team = getTeam();
+      const idx = team.findIndex(item => item.id === id);
+      if (idx !== -1) {
+        team[idx].size = newSize;
+        localStorage.setItem('collabTeam', JSON.stringify(team));
+        renderTeam();
+      }
+    }
+
+    function renderTeam() {
+      let team = getTeam();
+      const teamContainer = document.getElementById('teamContainer');
+      const emptyTeamState = document.getElementById('emptyTeamState');
+      const summaryCard = document.getElementById('summaryCard');
+
+      if (team.length === 0) {
+        teamContainer.style.display = 'none';
+        emptyTeamState.style.display = 'block';
+        summaryCard.style.display = 'none';
+      } else {
+        teamContainer.style.display = 'grid';
+        emptyTeamState.style.display = 'none';
+        summaryCard.style.display = 'block';
+
+        let totalPriceVal = 0;
+        let summaryHtml = '';
+
+        teamContainer.innerHTML = team.map(item => {
+          const dev = developersData.find(d => d.id === item.id);
+          if (!dev) return '';
+          const price = getTalentPrice(dev.level, item.size);
+          totalPriceVal += price;
+
+          summaryHtml += `
+            <div style="display:flex; justify-content:space-between; border-bottom:1px dashed var(--border-color); padding: 4px 0;">
+              <span>${dev.name} (${dev.level === 'pro' ? 'Pro' : 'Pemula'} — Proyek ${item.size === 'besar' ? 'Besar' : 'Kecil'})</span>
+              <strong>Rp ${price.toLocaleString('id-ID')}</strong>
+            </div>
+          `;
+
+          return `
+            <div class="card">
+              <img src="${dev.image}" alt="${dev.name}" class="profile-img">
+              <h3>${dev.name}</h3>
+              <div class="role">${dev.role} <span style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; background: ${dev.level==='pro'?'#2563eb':'#64748b'}; color:white; margin-left:4px;">${dev.level==='pro'?'Pro':'Pemula'}</span></div>
+              <div class="project-scale-box" style="background-color: var(--bg-color); padding: 0.65rem; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+                <label class="project-scale-label">Skala Proyek Terpilih:</label>
+                <select onchange="updateMemberSize(${dev.id}, this.value)" class="project-scale-select" style="background-color: var(--surface-color);">
+                  ${getProjectScaleOptions(dev.level, item.size)}
+                </select>
+              </div>
+              <div class="skill-badges">
+                ${dev.skills.slice(0, 3).map(s => `<span class="badge">${s}</span>`).join('')}
+              </div>
+              <div style="display: flex; gap: 0.5rem; margin-top: auto;">
+                <button onclick="navigate('detail', ${dev.id})" class="btn-outline" style="flex: 1; font-size: 0.85rem;">Profil</button>
+                <button onclick="removeMember(${dev.id})" class="btn-outline" style="color: #ef4444; border-color: #ef4444; flex: 1; font-size: 0.85rem;">Hapus</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        document.getElementById('totalMemberCount').textContent = `${team.length} Orang`;
+        document.getElementById('priceBreakdown').innerHTML = `<strong>Rincian Anggota & Skala Proyek:</strong><br>${summaryHtml}`;
+        document.getElementById('totalPrice').textContent = `Rp ${totalPriceVal.toLocaleString('id-ID')}`;
+      }
+    }
+
+    function removeMember(id) {
+      let team = getTeam();
+      team = team.filter(item => item.id !== id);
+      localStorage.setItem('collabTeam', JSON.stringify(team));
+      renderTeam();
+    }
+
+    async function payWithMidtrans(totalAmount) {
+      const btn = document.getElementById('btnPayMidtrans');
+      btn.disabled = true;
+      btn.textContent = 'Menghubungkan ke Midtrans...';
+
+      let team = getTeam();
+      const memberDetails = team.map(item => {
+        const dev = developersData.find(d => d.id === item.id);
+        return {
+          id: dev.id,
+          name: dev.name,
+          role: dev.role,
+          level: dev.level,
+          project_size: item.size,
+          price: getTalentPrice(dev.level, item.size)
+        };
+      });
+
+      try {
+        // Sesuaikan URL ini dengan endpoint API backend kamu
+        const response = await fetch('http://localhost:3000/api/create-transaction', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            order_id: 'COLLAB-' + Date.now(),
+            gross_amount: totalAmount,
+            members: memberDetails
+          })
+        });
+
+        const data = await response.json();
+
+        if (!data.token) {
+          throw new Error('Token transaksi tidak ditemukan dari respons backend.');
+        }
+
+        // Membuka jendela pop-up Midtrans Snap
+        window.snap.pay(data.token, {
+          onSuccess: function(result) {
+            alert('Pembayaran berhasil! Proyek kolaborasi siap dimulai.');
+            localStorage.removeItem('collabTeam');
+            navigate('myProject');
+          },
+          onPending: function(result) {
+            alert('Transaksi tertunda. Silakan selesaikan pembayaran sesuai instruksi.');
+          },
+          onError: function(result) {
+            alert('Pembayaran gagal. Silakan coba lagi.');
+          },
+          onClose: function() {
+            alert('Jendela pembayaran ditutup sebelum transaksi selesai.');
+          }
+        });
+
+      } catch (error) {
+        console.error('Midtrans Error:', error);
+        alert('Gagal memproses pembayaran: ' + error.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Bayar Sekarang';
+      }
+    }
+
+    function handleAuth(e, type) {
+      e.preventDefault();
+      alert(`Simulasi ${type} berhasil! Mengarahkan ke Halaman Utama.`);
+      navigate('home');
+    }
+
+    // Load halaman awal
+    navigate('home');
+  </script>
+</body>
+</html>
